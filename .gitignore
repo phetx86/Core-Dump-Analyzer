@@ -1,0 +1,4 @@
+*.class
+core.*
+*.core
+src_core_dump/first_prog
