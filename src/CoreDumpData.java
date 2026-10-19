@@ -4,7 +4,6 @@ public class CoreDumpData{
     public final NTFileInfo ntFileInfo;
     public final PrFPreg prFPreg; 
 
-
     public CoreDumpData(PrStatus prStatus,
                         SigInfo sigInfo,
                         NTFileInfo ntFileInfo,
@@ -132,15 +131,78 @@ public class CoreDumpData{
     }
     public String get_name_signal(){
         return switch(sigInfo.signo){
-            case 31 -> "SigSYS";
-            case 29 -> "SigPOLL";
-            case 17 -> "SigCHLD";
-            case 11 -> "SigSEGV";
-            case 8 -> "SigFPE";
-            case 7 -> "SigBUS";
-            case 5 -> "SigTRAP";
-            case 4 -> "SigILL";
+            case 31 -> "SIGSYS";
+            case 29 -> "SIGPOLL";
+            case 17 -> "SIGCHLD";
+            case 11 -> "SIGSEGV";
+            case 8 -> "SIGFPE";
+            case 7 -> "SIGBUS";
+            case 5 -> "SIGTRAP";
+            case 4 -> "SIGILL";
             default -> "UnSupported Signal";
         };
     }
+                
+    public String getGprReport(){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < prStatus.registers.length; i++){
+            if (i == 18) {
+            continue;
+            }
+          sb.append(prStatus.REGISTER_NAMES[i])
+          .append(" : 0x")
+          .append(String.format("%016x", prStatus.registers[i]))
+          .append("\n");
+        }
+      return sb.toString();
+    }  
+
+    private void appendFlag(StringBuilder sb, String name, long flags, int bit){
+        sb.append(String.format("%-4s : %d%n",name,(flags >>> bit) & 1L));
+    }
+
+    public String getRflagsReport(){
+        long flags = prStatus.registers[18];
+        StringBuilder sb = new StringBuilder();
+        appendFlag(sb, "CF", flags, 0);
+        appendFlag(sb, "PF", flags, 2);
+        appendFlag(sb, "AF", flags, 4);
+        appendFlag(sb, "ZF", flags, 6);
+        appendFlag(sb, "SF", flags, 7);
+        appendFlag(sb, "TF", flags, 8);
+        appendFlag(sb, "IF", flags, 9);
+        appendFlag(sb, "DF", flags, 10);
+        appendFlag(sb, "OF", flags, 11);
+        return sb.toString();
+    }
+    public String getSimdReport(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("MXCSR : 0x%08x%n", prFPreg.mxcsr));
+        sb.append("\n");
+        for(int i = 0; i < prFPreg.xmm_reg.length;i++){
+            sb.append("XMM").append(i).append(" : 0x");
+            for(byte b : prFPreg.xmm_reg[i]){
+                sb.append(String.format("%02x", b & 0xFF));
+            }
+        sb.append("\n");
+        }
+    return sb.toString();
+   }
+
+   public String getFPUreport(){
+       StringBuilder sb = new StringBuilder();
+       sb.append(String.format("CWD   : 0x%04x%n", prFPreg.cwd));
+       sb.append(String.format("SWD   : 0x%04x%n", prFPreg.swd));
+       sb.append(String.format("TWD   : 0x%04x%n", prFPreg.twd));
+       sb.append("\n");
+
+       for(int i = 0;i < prFPreg.st_reg.length;i++){
+           sb.append("ST").append(i).append(" : 0x");
+           for(byte b : prFPreg.st_reg[i]){
+               sb.append(String.format("%02x", b & 0xFF));
+           }
+       sb.append("\n");
+       }
+    return sb.toString();
+   }
 }

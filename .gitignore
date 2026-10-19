@@ -2,3 +2,7 @@
 core.*
 *.core
 src_core_dump/first_prog
+src_core_dump/second_prog
+*.o
+
+.gdb_history
