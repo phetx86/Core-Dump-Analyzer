@@ -176,6 +176,9 @@ public class CoreDumpData{
         return sb.toString();
     }
     public String getSimdReport(){
+        if(prFPreg == null){
+            return "SIMD data not available in this core dump\n";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("MXCSR : 0x%08x%n", prFPreg.mxcsr));
         sb.append("\n");
@@ -190,6 +193,9 @@ public class CoreDumpData{
    }
 
    public String getFPUreport(){
+       if(prFPreg == null){
+           return "FPU data not available in this core dump\n";
+       }
        StringBuilder sb = new StringBuilder();
        sb.append(String.format("CWD   : 0x%04x%n", prFPreg.cwd));
        sb.append(String.format("SWD   : 0x%04x%n", prFPreg.swd));

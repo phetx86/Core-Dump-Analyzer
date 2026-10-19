@@ -115,8 +115,7 @@ class ELFParser{
 
             if(prstatusDesc == null
                || siginfoDesc == null
-               || fileDesc == null
-               || prfpregDesc == null){
+               || fileDesc == null){
                 throw new IOException("Required ELF notes are missing");
             }
 
