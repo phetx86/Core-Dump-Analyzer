@@ -26,7 +26,6 @@ Detailed `si_code` descriptions are provided for:
 |---|---|
 | `SIGILL` | 4 |
 | `SIGTRAP` | 5 |
-| `SIGBUS` | 7 |
 | `SIGFPE` | 8 |
 | `SIGSEGV` | 11 |
 | `SIGCHLD` | 17 |
@@ -118,7 +117,7 @@ RIP is matched against the `NT_FILE` ranges to tell you which binary or shared l
 - **No AVX / AVX-512 / AMX state** (`NT_X86_XSTATE`). Only XMM0 to XMM15 and the x87 registers are shown.
 - **No backtrace, symbols, or memory inspection.** The tool reports the RIP and its containing file, not a function name or stack trace.
 - RIP is only matched against **file-backed** mappings. Code in anonymous memory (JIT, for example) shows `Not found in NT_FILE`.
-- Fault address is only meaningful for signals that set it (such as `SIGSEGV`, `SIGBUS`, `SIGILL`, `SIGFPE`).
+- Fault address is only meaningful for signals that set it (such as `SIGSEGV`, `SIGILL`, `SIGFPE`).
 - Signals outside the supported list are shown without a code description.
 
 ## Contributing
