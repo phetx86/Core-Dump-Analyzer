@@ -26,9 +26,9 @@ Detailed `si_code` descriptions are provided for:
 |---|---|
 | `SIGILL` | 4 |
 | `SIGTRAP` | 5 |
+| `SIGBUS` | 7 |
 | `SIGFPE` | 8 |
 | `SIGSEGV` | 11 |
-| `SIGCHLD` | 17 |
 | `SIGPOLL` | 29 |
 | `SIGSYS` | 31 |
 
